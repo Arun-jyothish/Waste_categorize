@@ -5,7 +5,7 @@ Servo ext_lid_Servo;
 Servo distributor;
 #define trig 9
 #define echo 10
-#define max_dist 100
+#define max_dist 500
 
 NewPing sonar(trig, echo, max_dist);
 
@@ -37,55 +37,58 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  bool is_wet = digitalRead(wet_sensor_pin);
+  delay(100);
+  bool is_wet = !digitalRead(wet_sensor_pin);
 
   int dist = sonar.ping_cm();
+  Serial.print("ultrasonic sensor read:  ");
+  Serial.println(dist);
   if (dist < approch_dist) {
     ext_lid_Servo.write(open_lid);
     Serial.println(" open ext lid servo ");
-    delay(5000);
-  }
-  else{
-    ext_lid_Servo.write(close_lid);
-	Serial.println("close ext lid servo");
-  bool is_metal = digitalRead(metal_sensor);
-  if ( is_metal == LOW ) {
-	  Serial.println("metal detected");
-    distributor.write(metal_bin_angle);
     delay(1000);
-    int_lid_Servo.write(open_angle);
-    Serial.println("open int lid servo");
-    delay_ts();
   }
   else {
+    ext_lid_Servo.write(close_lid);
+    Serial.println("close ext lid servo");
+    bool is_metal = digitalRead(metal_sensor);
+    if ( is_metal == LOW ) {
+      Serial.println("metal detected");
+      distributor.write(metal_bin_angle);
+      delay(1000);
+      int_lid_Servo.write(open_angle);
+      Serial.println("open int lid servo");
+      delay_ts();
+    }
+    else {
 
 
-    if ( is_wet) {
-    distributor.write(wet_bin_angle);
-    Serial.println("distributor at wet bin");
-    delay(1000);
-    int_lid_Servo.write(open_angle);
-    Serial.println("open int lid");
-    delay_ts();
+      if ( is_wet) {
+        distributor.write(wet_bin_angle);
+        Serial.println("distributor at wet bin");
+        delay(1000);
+        int_lid_Servo.write(open_angle);
+        Serial.println("open int lid");
+        delay_ts();
+      }
+      else {
+        distributor.write(dry_bin_angle);
+        Serial.println("distributor at dry bin");
+        delay(1000);
+        int_lid_Servo.write(open_angle);
+        Serial.println("open int lid");
+        delay_ts();
+      }
     }
-    else{
-    distributor.write(dry_bin_angle);
-    Serial.println("distributor at dry bin");
-    delay(1000);
-    int_lid_Servo.write(open_angle);
-    Serial.println("open int lid");
-    delay_ts();
-    }
+
   }
 
-  }
-  
 }
 
-void delay_ts(){
-	Serial.println("dealy ts fn called ");
-	delay(1000);
-	int_lid_Servo.write(open_angle);
-	delay(3000); // delay dump time 
-	int_lid_Servo.write(close_angle);
+void delay_ts() {
+  Serial.println("dealy ts fn called ");
+  delay(1000);
+  int_lid_Servo.write(open_angle);
+  delay(1000); // delay dump time
+  int_lid_Servo.write(close_angle);
 }
