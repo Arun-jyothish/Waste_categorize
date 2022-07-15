@@ -64,7 +64,7 @@ void loop() {
     int_lid_Servo.write(open_angle);
     delay_ts();
     }
-    else if{
+    else{
     distributor.write(dry_bin_angle);
     delay(1000);
     int_lid_Servo.write(open_angle);
@@ -78,7 +78,7 @@ void loop() {
 
 void delay_ts(){
 	delay(1000);
-	int_lid_Servo.write(open_angle)
+	int_lid_Servo.write(open_angle);
 	delay(3000); // delay dump time 
 	int_lid_Servo.write(close_angle);
 }
