@@ -2,22 +2,22 @@
 
 ~~~mermaid
 graph TD 
-a[start] --> b{check ultrasonic_reading}
-e-->d1[delay]
-b--below_value-->e[open ext lid]
-d1-->a
-b --above_value-->d[close ext lid]
-d-->ch{check metal}
-ch--yes-->z1[distributor go to metal bin]
-ch--no-->z2{check weather wet or not}
-z2--wet-->z3[distributor go to wet bin]
-z2--dry-->z4[distributor go to dry bin]
-z4-->dl[delay ts]
-z3-->dl
-z1-->dl
-dl-->int[internal lid open]
-int-->dl2[delay dump time]
-dl2-->cl2[close int lid]
-cl2-->a
+A((START)) --> B{CHECK ULTRASONIC_READING}
+E-->D1[DELAY]
+B--BELOW_VALUE-->E[OPEN EXT LID]
+D1-->STOP((END))
+B --ABOVE_VALUE-->D[CLOSE EXT LID]
+D-->CH{CHECK METAL}
+CH--YES-->Z1[DISTRIBUTOR TO METAL BIN]
+CH--NO-->Z2{CHECK WEATHER WET OR NOT}
+Z2--WET-->Z3[DISTRIBUTOR TO WET BIN]
+Z2--DRY-->Z4[DISTRIBUTOR TO DRY BIN]
+Z4-->DL[DELAY TS]
+Z3-->DL
+Z1-->DL
+DL-->INT[INTERNAL LID OPEN]
+INT-->DL2[DELAY DUMP TIME]
+DL2-->CL2[CLOSE INT LID]
+CL2-->STOP
 
 ~~~
