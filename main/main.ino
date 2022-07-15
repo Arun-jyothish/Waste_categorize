@@ -31,8 +31,7 @@ void setup() {
   ext_lid_Servo.attach(ext_ext_lid_Servo_pin);
   distributor.attach(distributor_servo_pin);
   pinMode(metal_sensor, INPUT_PULLUP);
-
-
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -43,16 +42,19 @@ void loop() {
   int dist = sonar.ping_cm();
   if (dist < approch_dist) {
     ext_lid_Servo.write(open_lid);
+    Serial.println(" open ext lid servo ");
     delay(5000);
   }
   else{
     ext_lid_Servo.write(close_lid);
-
+	Serial.println("close ext lid servo");
   bool is_metal = digitalRead(metal_sensor);
   if ( is_metal == LOW ) {
+	  Serial.println("metal detected");
     distributor.write(metal_bin_angle);
     delay(1000);
     int_lid_Servo.write(open_angle);
+    Serial.println("open int lid servo");
     delay_ts();
   }
   else {
@@ -60,14 +62,18 @@ void loop() {
 
     if ( is_wet) {
     distributor.write(wet_bin_angle);
+    Serial.println("distributor at wet bin");
     delay(1000);
     int_lid_Servo.write(open_angle);
+    Serial.println("open int lid");
     delay_ts();
     }
     else{
     distributor.write(dry_bin_angle);
+    Serial.println("distributor at dry bin");
     delay(1000);
     int_lid_Servo.write(open_angle);
+    Serial.println("open int lid");
     delay_ts();
     }
   }
@@ -77,6 +83,7 @@ void loop() {
 }
 
 void delay_ts(){
+	Serial.println("dealy ts fn called ");
 	delay(1000);
 	int_lid_Servo.write(open_angle);
 	delay(3000); // delay dump time 
