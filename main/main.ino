@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <NewPing.h>
 Servo int_lid_Servo;
-Servo lidServo;
+Servo ext_lid_Servo;
 Servo distributor;
 #define trig 9
 #define echo 10
@@ -15,7 +15,7 @@ int metal_bin_angle = 180;
 
 const int distributor_servo_pin  = 11;
 const int int_lid_servo_pin = 6;
-const int ext_lidServo_pin  = 3;
+const int ext_ext_lid_Servo_pin  = 3;
 
 int wet_sensor_pin = 2; /// connect wet sensor pin
 int metal_sensor = 7;
@@ -28,7 +28,7 @@ int open_lid = 180; // when approch lid open
 void setup() {
   // put your setup code here, to run once
   int_lid_Servo.attach(int_lid_servo_pin);
-  lidServo.attach(ext_lidServo_pin);
+  ext_lid_Servo.attach(ext_ext_lid_Servo_pin);
   distributor.attach(distributor_servo_pin);
   pinMode(metal_sensor, INPUT_PULLUP);
 
@@ -42,43 +42,43 @@ void loop() {
 
   int dist = sonar.ping_cm();
   if (dist < approch_dist) {
-    int_lid_Servo.write(close_angle);
-    delay(1000);
-    lidServo.write(open_lid);
+    ext_lid_Servo.write(open_lid);
+    delay(5000);
   }
   else{
-    lidServo.write(close_lid);
+    ext_lid_Servo.write(close_lid);
 
   bool is_metal = digitalRead(metal_sensor);
   if ( is_metal == LOW ) {
-    int_lid_Servo.write(close_angle);
-    delay(1000);
     distributor.write(metal_bin_angle);
     delay(1000);
     int_lid_Servo.write(open_angle);
-    delay(1000);
+    delay_ts();
   }
   else {
 
 
     if ( is_wet) {
-    int_lid_Servo.write(close_angle);
-    delay(1000);
     distributor.write(wet_bin_angle);
     delay(1000);
     int_lid_Servo.write(open_angle);
-    delay(1000);
+    delay_ts();
     }
     else if{
-    int_lid_Servo.write(close_angle);
-    delay(1000);
     distributor.write(dry_bin_angle);
     delay(1000);
     int_lid_Servo.write(open_angle);
-    delay(1000);
+    delay_ts();
     }
   }
 
   }
   
+}
+
+void delay_ts(){
+	delay(1000);
+	int_lid_Servo.write(open_angle)
+	delay(3000); // delay dump time 
+	int_lid_Servo.write(close_angle);
 }

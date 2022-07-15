@@ -5,6 +5,7 @@ graph TD
 a[start] --> b{check ultrasonic_reading}
 e-->d1[delay]
 b--below_value-->e[open ext lid]
+d1-->a
 b --above_value-->d[close ext lid]
 d-->ch{check metal}
 ch--yes-->z1[distributor go to metal bin]
